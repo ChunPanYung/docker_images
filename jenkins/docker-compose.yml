@@ -1,0 +1,18 @@
+---
+version: "3"
+volumes:
+  home:
+    name: jenkins_home
+
+services:
+  app:
+    image: local/jenkins:casc
+    build:
+      context: .
+    restart: always
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock:rw
