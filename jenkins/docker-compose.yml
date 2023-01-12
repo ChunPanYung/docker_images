@@ -9,6 +9,8 @@ services:
     image: local/jenkins:casc
     build:
       context: .
+      args:
+        - GID="${GID}"
     restart: always
     ports:
       - 8080:8080
