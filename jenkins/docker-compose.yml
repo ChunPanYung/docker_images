@@ -10,7 +10,7 @@ services:
     build:
       context: .
       args:
-        - GID="${GID}"
+        - GID=${GID}
     restart: always
     ports:
       - 8080:8080
