@@ -6,18 +6,6 @@ volumes:
     name: nextcloud_aio_mastercontainer
 
 services:
-  caddy:
-    image: caddy:alpine
-    restart: unless-stopped
-    container_name: caddy
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - ${HOME_DIR}/certs:/certs
-      - ${HOME_DIR}/config:/config
-      - ${HOME_DIR}/data:/data
-      - ${HOME_DIR}/sites:/srv
-    network_mode: host
-
   nextcloud:
     image: nextcloud/all-in-one:latest
     restart: unless-stopped
@@ -25,10 +13,20 @@ services:
     volumes:
       - nextcloud_aio_mastercontainer:/mnt/docker-aio-config
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /mnt/nc_backup:/mnt/bacup
     ports:
-      - "8443:8443"
+      - "8080:8080"
     environment:
       - APACHE_PORT=11000
       - APACHE_IP_BINDING=127.0.0.1
+      - SKIP_DOMAIN_VALIDATION=true  # For using with Cloudflare Tunnel
     depends_on:
       - caddy
+
+  caddy:
+    image: caddy:alpine
+    restart: unless-stopped
+    container_name: caddy
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    network_mode: "host"
