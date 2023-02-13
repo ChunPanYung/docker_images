@@ -2,7 +2,7 @@
 version: '2'
 
 volumes:
-  nextcloud:
+  app:
   db:
 
 services:
@@ -13,7 +13,8 @@ services:
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     volumes:
       - db:/var/lib/mysql
-    env_file: 
+    env_file:
+      - /etc/secrets/nextcloud.ini
       - .env
     environment:
       - MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD}"
@@ -30,8 +31,9 @@ services:
     links:
       - db
     volumes:
-      - ${NEXTCLOUD_CONFIG}:/var/www/html
+      - app:/var/www/html
     env_file:
+      - /etc/secrets/nextcloud.ini
       - .env
     environment:
       - MYSQL_PASSWORD="${MYSQL_PASSWORD}"
