@@ -28,5 +28,5 @@ services:
     restart: unless-stopped
     container_name: caddy
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
+      - /etc/caddy/Caddyfile:/etc/caddy/Caddyfile
     network_mode: "host"
