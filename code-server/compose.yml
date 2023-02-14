@@ -10,7 +10,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - PASSWORD=${PASSOWRD}
+      - PASSWORD=${PASSWORD}
       - SUDO_PASSWORD=${SUDO_PASSWORD}
       - PROXY_DOMAIN=${PROXY}
       - DEFAULT_WORKSPACE=/workspace
