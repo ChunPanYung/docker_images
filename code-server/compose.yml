@@ -1,0 +1,22 @@
+---
+version: "2.1"
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code-server
+    env_file:
+      - .env
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - PASSWORD=${PASSOWRD}
+      - SUDO_PASSWORD=${SUDO_PASSWORD}
+      - PROXY_DOMAIN=${PROXY}
+      - DEFAULT_WORKSPACE=/workspace
+    volumes:
+      - /etc/code-server:/config
+      - /var/lib/git:/workspace
+    ports:
+      - 8443:8443
+    restart: unless-stopped
