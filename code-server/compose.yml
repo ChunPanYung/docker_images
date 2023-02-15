@@ -2,7 +2,9 @@
 version: "2.1"
 services:
   code-server:
-    image: lscr.io/linuxserver/code-server:latest
+    build:
+      context: .
+    image: self/code-server:${TAG}
     container_name: code-server
     env_file:
       - .env
