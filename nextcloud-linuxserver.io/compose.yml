@@ -9,8 +9,8 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
     volumes:
-      - /etc/nextcloud:/config
-      - /var/lib/nextcloud:/data
+      - /usr/local/etc/nextcloud:/config
+      - /usr/local/lib/nextcloud:/data
     ports:
       - 443:443
     restart: unless-stopped
