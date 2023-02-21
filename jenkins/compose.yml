@@ -6,7 +6,7 @@ volumes:
 
 services:
   app:
-    image: local/jenkins:casc
+    image: self/jenkins:${DOCKER_TAG}
     build:
       context: .
       args:
