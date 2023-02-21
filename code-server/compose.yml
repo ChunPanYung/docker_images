@@ -17,8 +17,8 @@ services:
       - PROXY_DOMAIN=${PROXY}
       - DEFAULT_WORKSPACE=/workspace
     volumes:
-      - /etc/code-server:/config
-      - /var/lib/git:/workspace
+      - /usr/local/etc/code-server:/config
+      - /usr/local/lib/git:/workspace
     ports:
       - 8443:8443
     restart: unless-stopped
