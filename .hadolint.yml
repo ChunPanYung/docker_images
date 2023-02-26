@@ -1,0 +1,4 @@
+---
+ignored:
+  - "DL3007"  # ignore latest docker image version
+  - "DL3008"  # Do not specify version when install package
