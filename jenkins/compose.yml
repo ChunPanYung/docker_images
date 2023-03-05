@@ -1,20 +1,41 @@
 ---
 version: "3"
+
+networks:
+  default:
+    external:
+      name: jenkins  # $ docker network create jenkins
+
 volumes:
-  home:
-    name: jenkins_home
+  jenkins-data:
+  jenkins-docker-certs:
 
 services:
-  app:
-    image: self/jenkins:${DOCKER_TAG}
-    build:
-      context: .
-      args:
-        - GID=${GID}
-    restart: always
-    ports:
-      - 8080:8080
-      - 50000:50000
+  docker:
+    image: 'docker:dind'
+    container_name: jenkins-docker
+    privileged: true
+    restart: unless-stopped
+    environment:
+      - DOCKER_TSL_CERTDIR=/certs
     volumes:
-      - /var/lib/jenkins:/var/jenkins_home:rw
-      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - jenkins-docker-certs:/certs/client
+      - jenkins-data:/var/jenkins_home
+    ports:
+      - 2376:2376
+    command: --storage-driver=overlay2
+
+  jenkins-blueocean:
+    container_name: jenkins-blueocean
+    restart: on-failure
+    environment:
+      - 'DOCKER_HOST=tcp://docker:2376'
+      - 'DOCKER_CERT_PATH=/certs/client'
+      - 'DOCKER_TLS_VERIFY=1'
+    ports:
+      - '8080:8080'
+      - '50000:50000'
+    volumes:
+      - 'jenkins-data:/var/jenkins_home'
+      - 'jenkins-docker-certs:/certs/client:ro'
+    image: "self/jenkins:${TAG}"

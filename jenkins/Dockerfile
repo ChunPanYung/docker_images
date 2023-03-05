@@ -1,14 +1,17 @@
+FROM jenkins/jenkins:jdk11
 # need root user for package installation
-FROM jenkins/jenkins
 USER root
-
-ENV SH_DOCKER=/tmp/get-docker.sh
-ARG GID
-
-RUN curl -fsSL https://get.docker.com/ -o ${SH_DOCKER}
-RUN chmod 744 ${SH_DOCKER} && sh ${SH_DOCKER}
-RUN rm ${SH_DOCKER}
-RUN groupmod --gid ${GID} docker
-RUN usermod --append --group docker jenkins
-
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends lsb-release && \
+    rm /var/lib/apt/lists/* -rf
+RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
+  https://download.docker.com/linux/debian/gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) \
+  signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
+  https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+RUN apt-get update && \
+    apt-get install -y  --no-install-recommends docker-ce-cli && \
+    rm /var/lib/apt/lists/* -rf
 USER jenkins
+RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
